@@ -1,0 +1,254 @@
+##########################################################################
+# ---------------------------------------------------------------------------------------------------------------------
+# This is Python code to produce IPCC AR6 WGI Figure 5.30
+# Creator: Charles Koven, Lawrence Berkeley Natinoal Lab
+# Contact: cdkoven@lbl.gov
+# Last updated on: Mar 8, 2021
+# --------------------------------------------------------------------------------------------------------------------
+#
+# - Code functionality: This script loads CMIP6 model data and calculates long-term dynamics of carbon fluxes for three scenarios.
+# - Input data:All files below are from ESGF CMIP6 data, except for the last UVic files, which are available ar https://doi.org/10.5281/ZENODO.4663137:
+
+
+tas_Amon_CanESM5_historical_r1i1p1f1_gn_185001-201412.nc
+fgco2_Oyr_CanESM5_historical_r1i1p1f1_gn_1850-2014.nc
+nbp_Lmon_CanESM5_historical_r1i1p1f1_gn_185001-201412.nc
+tas_Amon_CanESM5_ssp585_r1i1p1f1_gn_201501-210012.nc
+tas_Amon_CanESM5_ssp585_r1i1p1f1_gn_210101-218012.nc
+tas_Amon_CanESM5_ssp585_r1i1p1f1_gn_218101-230012.nc
+fgco2_Oyr_CanESM5_ssp585_r1i1p1f1_gn_2015-2100.nc
+fgco2_Oyr_CanESM5_ssp585_r1i1p1f1_gn_2101-2180.nc
+fgco2_Oyr_CanESM5_ssp585_r1i1p1f1_gn_2181-2300.nc
+nbp_Lmon_CanESM5_ssp585_r1i1p1f1_gn_201501-210012.nc
+nbp_Lmon_CanESM5_ssp585_r1i1p1f1_gn_210101-218012.nc
+nbp_Lmon_CanESM5_ssp585_r1i1p1f1_gn_218101-230012.nc
+tas_Amon_CanESM5_ssp534-over_r1i1p1f1_gn_204001-210012.nc
+tas_Amon_CanESM5_ssp534-over_r1i1p1f1_gn_210101-230012.nc
+fgco2_Oyr_CanESM5_ssp534-over_r1i1p1f1_gn_2040-2100.nc
+fgco2_Oyr_CanESM5_ssp534-over_r1i1p1f1_gn_2101-2300.nc
+nbp_Lmon_CanESM5_ssp534-over_r1i1p1f1_gn_204001-210012.nc
+nbp_Lmon_CanESM5_ssp534-over_r1i1p1f1_gn_210101-230012.nc
+cSoil_Emon_CanESM5_historical_r1i1p1f1_gn_185001-201412.nc
+cSoil_Emon_CanESM5_ssp585_r1i1p1f1_gn_201501-210012.nc
+cSoil_Emon_CanESM5_ssp585_r1i1p1f1_gn_210101-218012.nc
+cSoil_Emon_CanESM5_ssp585_r1i1p1f1_gn_218101-230012.nc
+cSoil_Emon_CanESM5_ssp534-over_r1i1p1f1_gn_204001-210012.nc
+cSoil_Emon_CanESM5_ssp534-over_r1i1p1f1_gn_210101-230012.nc
+cVeg_Lmon_CanESM5_historical_r1i1p1f1_gn_185001-201412.nc
+cVeg_Lmon_CanESM5_ssp585_r1i1p1f1_gn_201501-210012.nc
+cVeg_Lmon_CanESM5_ssp585_r1i1p1f1_gn_210101-218012.nc
+cVeg_Lmon_CanESM5_ssp585_r1i1p1f1_gn_218101-230012.nc
+cVeg_Lmon_CanESM5_ssp534-over_r1i1p1f1_gn_204001-210012.nc
+cVeg_Lmon_CanESM5_ssp534-over_r1i1p1f1_gn_210101-230012.nc
+tas_Amon_CanESM5_ssp126_r1i1p1f1_gn_201501-210012.nc
+tas_Amon_CanESM5_ssp126_r1i1p1f1_gn_210101-230012.nc
+fgco2_Oyr_CanESM5_ssp126_r1i1p1f1_gn_2015-2100.nc
+fgco2_Oyr_CanESM5_ssp126_r1i1p1f1_gn_2101-2300.nc
+nbp_Lmon_CanESM5_ssp126_r1i1p1f1_gn_201501-210012.nc
+nbp_Lmon_CanESM5_ssp126_r1i1p1f1_gn_210101-230012.nc
+areacella_fx_CanESM5_ssp585_r1i1p1f1_gn.nc
+areacello_Ofx_CanESM5_ssp585_r1i1p1f1_gn.nc
+sftlf_fx_CanESM5_ssp585_r1i1p1f1_gn.nc
+sftof_Ofx_CanESM5_ssp585_r1i1p1f1_gn.nc
+tas_Amon_CESM2-WACCM_historical_r1i1p1f1_gn_185001-201412.nc
+fgco2_Omon_CESM2-WACCM_historical_r1i1p1f1_gn_185001-201412.nc
+nbp_Lmon_CESM2-WACCM_historical_r1i1p1f1_gn_185001-201412.nc
+tas_Amon_CESM2-WACCM_ssp585_r1i1p1f1_gn_201501-210012.nc
+tas_Amon_CESM2-WACCM_ssp585_r1i1p1f1_gn_210101-215012.nc
+tas_Amon_CESM2-WACCM_ssp585_r1i1p1f1_gn_215101-220012.nc
+tas_Amon_CESM2-WACCM_ssp585_r1i1p1f1_gn_220101-225012.nc
+tas_Amon_CESM2-WACCM_ssp585_r1i1p1f1_gn_225101-229912.nc
+fgco2_Omon_CESM2-WACCM_ssp585_r1i1p1f1_gn_201501-210012.nc
+fgco2_Omon_CESM2-WACCM_ssp585_r1i1p1f1_gn_210101-215012.nc
+fgco2_Omon_CESM2-WACCM_ssp585_r1i1p1f1_gn_215101-220012.nc
+fgco2_Omon_CESM2-WACCM_ssp585_r1i1p1f1_gn_220101-225012.nc
+fgco2_Omon_CESM2-WACCM_ssp585_r1i1p1f1_gn_225101-229912.nc
+nbp_Lmon_CESM2-WACCM_ssp585_r1i1p1f1_gn_201501-210012.nc
+nbp_Lmon_CESM2-WACCM_ssp585_r1i1p1f1_gn_210101-215012.nc
+nbp_Lmon_CESM2-WACCM_ssp585_r1i1p1f1_gn_215101-220012.nc
+nbp_Lmon_CESM2-WACCM_ssp585_r1i1p1f1_gn_220101-225012.nc
+nbp_Lmon_CESM2-WACCM_ssp585_r1i1p1f1_gn_225101-229912.nc
+tas_Amon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_204001-208912.nc
+tas_Amon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_209001-210012.nc
+tas_Amon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_210101-215012.nc
+tas_Amon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_215101-220012.nc
+tas_Amon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_220101-225012.nc
+tas_Amon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_225101-229912.nc
+fgco2_Omon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_204001-210012.nc
+fgco2_Omon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_210101-215012.nc
+fgco2_Omon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_215101-220012.nc
+fgco2_Omon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_220101-225012.nc
+fgco2_Omon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_225101-229912.nc
+nbp_Lmon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_204001-210012.nc
+nbp_Lmon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_210101-215012.nc
+nbp_Lmon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_215101-220012.nc
+nbp_Lmon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_220101-225012.nc
+nbp_Lmon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_225101-229912.nc
+cSoil_Emon_CESM2-WACCM_historical_r1i1p1f1_gn_185001-201412.nc
+cSoil_Emon_CESM2-WACCM_ssp585_r1i1p1f1_gn_201501-210012.nc
+cSoil_Emon_CESM2-WACCM_ssp585_r1i1p1f1_gn_210101-215012.nc
+cSoil_Emon_CESM2-WACCM_ssp585_r1i1p1f1_gn_215101-220012.nc
+cSoil_Emon_CESM2-WACCM_ssp585_r1i1p1f1_gn_220101-225012.nc
+cSoil_Emon_CESM2-WACCM_ssp585_r1i1p1f1_gn_225101-229912.nc
+cSoil_Emon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_204001-210012.nc
+cSoil_Emon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_210101-215012.nc
+cSoil_Emon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_215101-220012.nc
+cSoil_Emon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_220101-225012.nc
+cSoil_Emon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_225101-229912.nc
+cVeg_Lmon_CESM2-WACCM_historical_r1i1p1f1_gn_185001-201412.nc
+cVeg_Lmon_CESM2-WACCM_ssp585_r1i1p1f1_gn_201501-210012.nc
+cVeg_Lmon_CESM2-WACCM_ssp585_r1i1p1f1_gn_210101-215012.nc
+cVeg_Lmon_CESM2-WACCM_ssp585_r1i1p1f1_gn_215101-220012.nc
+cVeg_Lmon_CESM2-WACCM_ssp585_r1i1p1f1_gn_220101-225012.nc
+cVeg_Lmon_CESM2-WACCM_ssp585_r1i1p1f1_gn_225101-229912.nc
+cVeg_Lmon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_204001-210012.nc
+cVeg_Lmon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_210101-215012.nc
+cVeg_Lmon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_215101-220012.nc
+cVeg_Lmon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_220101-225012.nc
+cVeg_Lmon_CESM2-WACCM_ssp534-over_r1i1p1f1_gn_225101-229912.nc
+tas_Amon_CESM2-WACCM_ssp126_r1i1p1f1_gn_201501-206412.nc
+tas_Amon_CESM2-WACCM_ssp126_r1i1p1f1_gn_206501-210012.nc
+tas_Amon_CESM2-WACCM_ssp126_r1i1p1f1_gn_210101-215012.nc
+tas_Amon_CESM2-WACCM_ssp126_r1i1p1f1_gn_215101-220012.nc
+tas_Amon_CESM2-WACCM_ssp126_r1i1p1f1_gn_220101-225012.nc
+tas_Amon_CESM2-WACCM_ssp126_r1i1p1f1_gn_225101-229912.nc
+fgco2_Omon_CESM2-WACCM_ssp126_r1i1p1f1_gn_201501-210012.nc
+fgco2_Omon_CESM2-WACCM_ssp126_r1i1p1f1_gn_210101-215012.nc
+fgco2_Omon_CESM2-WACCM_ssp126_r1i1p1f1_gn_215101-220012.nc
+fgco2_Omon_CESM2-WACCM_ssp126_r1i1p1f1_gn_220101-225012.nc
+fgco2_Omon_CESM2-WACCM_ssp126_r1i1p1f1_gn_225101-229912.nc
+nbp_Lmon_CESM2-WACCM_ssp126_r1i1p1f1_gn_201501-210012.nc
+nbp_Lmon_CESM2-WACCM_ssp126_r1i1p1f1_gn_210101-215012.nc
+nbp_Lmon_CESM2-WACCM_ssp126_r1i1p1f1_gn_215101-220012.nc
+nbp_Lmon_CESM2-WACCM_ssp126_r1i1p1f1_gn_220101-225012.nc
+nbp_Lmon_CESM2-WACCM_ssp126_r1i1p1f1_gn_225101-229912.nc
+areacella_fx_CESM2-WACCM_ssp585_r1i1p1f1_gn.nc
+areacello_Ofx_CESM2-WACCM_ssp585_r1i1p1f1_gn.nc
+sftlf_fx_CESM2-WACCM_ssp585_r1i1p1f1_gn.nc
+sftof_Ofx_CESM2-WACCM_ssp585_r1i1p1f1_gn.nc
+gpp_Lmon_CESM2-WACCM_piControl_r1i1p1f1_gn_045001-049912.nc
+tas_Amon_IPSL-CM6A-LR_historical_r1i1p1f1_gr_185001-201412.nc
+fgco2_Oyr_IPSL-CM6A-LR_historical_r1i1p1f1_gn_1850-2014.nc
+nbp_Lmon_IPSL-CM6A-LR_historical_r1i1p1f1_gr_185001-201412.nc
+tas_Amon_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_201501-210012.nc
+tas_Amon_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_210101-230012.nc
+fgco2_Oyr_IPSL-CM6A-LR_ssp585_r1i1p1f1_gn_2015-2100.nc
+fgco2_Oyr_IPSL-CM6A-LR_ssp585_r1i1p1f1_gn_2101-2300.nc
+nbp_Lmon_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_201501-210012.nc
+nbp_Lmon_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_210101-230012.nc
+tas_Amon_IPSL-CM6A-LR_ssp534-over_r1i1p1f1_gr_204001-210012.nc
+tas_Amon_IPSL-CM6A-LR_ssp534-over_r1i1p1f1_gr_210101-230012.nc
+fgco2_Oyr_IPSL-CM6A-LR_ssp534-over_r1i1p1f1_gn_2040-2100.nc
+fgco2_Oyr_IPSL-CM6A-LR_ssp534-over_r1i1p1f1_gn_2101-2300.nc
+nbp_Lmon_IPSL-CM6A-LR_ssp534-over_r1i1p1f1_gr_204001-210012.nc
+nbp_Lmon_IPSL-CM6A-LR_ssp534-over_r1i1p1f1_gr_210101-230012.nc
+cSoil_Emon_IPSL-CM6A-LR_historical_r1i1p1f1_gr_185001-201412.nc
+cSoil_Emon_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_201501-210012.nc
+cSoil_Emon_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_210101-230012.nc
+cSoil_Emon_IPSL-CM6A-LR_ssp534-over_r1i1p1f1_gr_204001-210012.nc
+cSoil_Emon_IPSL-CM6A-LR_ssp534-over_r1i1p1f1_gr_210101-230012.nc
+cVeg_Lmon_IPSL-CM6A-LR_historical_r1i1p1f1_gr_185001-201412.nc
+cVeg_Lmon_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_201501-210012.nc
+cVeg_Lmon_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr_210101-230012.nc
+cVeg_Lmon_IPSL-CM6A-LR_ssp534-over_r1i1p1f1_gr_204001-210012.nc
+cVeg_Lmon_IPSL-CM6A-LR_ssp534-over_r1i1p1f1_gr_210101-230012.nc
+tas_Amon_IPSL-CM6A-LR_ssp126_r1i1p1f1_gr_201501-210012.nc
+tas_Amon_IPSL-CM6A-LR_ssp126_r1i1p1f1_gr_210101-230012.nc
+fgco2_Oyr_IPSL-CM6A-LR_ssp126_r1i1p1f1_gn_2015-2100.nc
+fgco2_Oyr_IPSL-CM6A-LR_ssp126_r1i1p1f1_gn_2101-2300.nc
+nbp_Lmon_IPSL-CM6A-LR_ssp126_r1i1p1f1_gr_201501-210012.nc
+nbp_Lmon_IPSL-CM6A-LR_ssp126_r1i1p1f1_gr_210101-230012.nc
+areacella_fx_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr.nc
+areacello_Ofx_IPSL-CM6A-LR_ssp585_r1i1p1f1_gn.nc
+sftlf_fx_IPSL-CM6A-LR_ssp585_r1i1p1f1_gr.nc
+tas_Amon_UKESM1-0-LL_historical_r4i1p1f2_gn_185001-194912.nc
+tas_Amon_UKESM1-0-LL_historical_r4i1p1f2_gn_195001-201412.nc
+fgco2_Omon_UKESM1-0-LL_historical_r4i1p1f2_gn_185001-194912.nc
+fgco2_Omon_UKESM1-0-LL_historical_r4i1p1f2_gn_195001-201412.nc
+nbp_Lmon_UKESM1-0-LL_historical_r4i1p1f2_gn_185001-194912.nc
+nbp_Lmon_UKESM1-0-LL_historical_r4i1p1f2_gn_195001-201412.nc
+tas_Amon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_201501-204912.nc
+tas_Amon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_205001-210012.nc
+tas_Amon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_210101-214912.nc
+tas_Amon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_215001-224912.nc
+tas_Amon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_225001-230012.nc
+fgco2_Omon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_201501-204912.nc
+fgco2_Omon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_205001-210012.nc
+fgco2_Omon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_210101-214912.nc
+fgco2_Omon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_215001-224912.nc
+fgco2_Omon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_225001-230012.nc
+nbp_Lmon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_201501-204912.nc
+nbp_Lmon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_205001-210012.nc
+nbp_Lmon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_210101-214912.nc
+nbp_Lmon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_215001-224912.nc
+nbp_Lmon_UKESM1-0-LL_ssp585_r4i1p1f2_gn_225001-230012.nc
+tas_Amon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_204001-204912.nc
+tas_Amon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_205001-210012.nc
+tas_Amon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_210101-214912.nc
+tas_Amon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_215001-224912.nc
+tas_Amon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_225001-230012.nc
+fgco2_Omon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_204001-204912.nc
+fgco2_Omon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_205001-210012.nc
+fgco2_Omon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_210101-214912.nc
+fgco2_Omon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_215001-224912.nc
+fgco2_Omon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_225001-230012.nc
+nbp_Lmon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_204001-204912.nc
+nbp_Lmon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_205001-210012.nc
+nbp_Lmon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_210101-214912.nc
+nbp_Lmon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_215001-224912.nc
+nbp_Lmon_UKESM1-0-LL_ssp534-over_r4i1p1f2_gn_225001-230012.nc
+cSoil_UKESM1-0-LL_historical_185001-201412_rename.nc
+cSoil_UKESM1-0-LL_ssp585_201501-230012_rename.nc
+cSoil_UKESM1-0-LL_ssp534-over_204001-230012_rename.nc
+cVeg_UKESM1-0-LL_historical_185001-201412_rename.nc
+cVeg_UKESM1-0-LL_ssp585_201501-230012_rename.nc
+cVeg_UKESM1-0-LL_ssp534-over_204001-230012_rename.nc
+tas_Amon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_201501-204912.nc
+tas_Amon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_205001-210012.nc
+tas_Amon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_210101-214912.nc
+tas_Amon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_215001-224912.nc
+tas_Amon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_225001-230012.nc
+fgco2_Omon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_201501-204912.nc
+fgco2_Omon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_205001-210012.nc
+fgco2_Omon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_210101-214912.nc
+fgco2_Omon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_215001-224912.nc
+fgco2_Omon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_225001-230012.nc
+nbp_Lmon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_201501-204912.nc
+nbp_Lmon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_205001-210012.nc
+nbp_Lmon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_210101-214912.nc
+nbp_Lmon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_215001-224912.nc
+nbp_Lmon_UKESM1-0-LL_ssp126_r4i1p1f2_gn_225001-230012.nc
+areacella_fx_UKESM1-0-LL_piControl_r1i1p1f2_gn.nc
+areacello_Ofx_UKESM1-0-LL_piControl_r1i1p1f2_gn.nc
+sftlf_fx_UKESM1-0-LL_piControl_r1i1p1f2_gn.nc
+sftof_Ofx_UKESM1-0-LL_piControl_r1i1p1f2_gn.nc
+
+UVic_SSP5-34OS_global.nc
+UVic_SSP5-85_global.nc
+tsi_126.nc
+UVic_SSP5-34OS_spatial.nc
+UVic_SSP5-85_spatial.nc
+
+# - Output variables: The code plots the figure as in the report
+#
+# ----------------------------------------------------------------------------------------------------
+# Information on  the software used
+# - Software Version:
+numpy version 1.19.1
+xarray version 0.16.1
+scipy version 1.5.2
+matplotlib version 3.3.1
+cartopy version 0.18.0
+pandas version 1.1.3
+xesmf version 0.3.0
+# - Landing page to access the software: [if possible provide a DOI]* 
+# - Operating System: Linux 5.3.18-150200.24.115-default
+# - Environment required to compile and run: jupyter
+#  ----------------------------------------------------------------------------------------------------
+#
+#  License: Creative Commons Attribution 4.0 International License (http://creativecommons.org/licenses/by/4.0/)
+#
+# ----------------------------------------------------------------------------------------------------
+# How to cite:
+# When citing this code, please include both the code citation and the following citation for the related report component:
+########################################################################
